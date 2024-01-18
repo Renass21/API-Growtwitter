@@ -12,29 +12,44 @@ datasource db {
 
 
 model User {
-  idUser String @db.Uuid @id @default(uuid()) @map("id_user")
-  name String @db.VarChar(30)
+  idUser   String @db.Uuid @id @default(uuid()) 
+  name     String @db.VarChar(30)
   username String @db.VarChar(30)
-  email String @db.VarChar(30) @unique
+  email    String @db.VarChar(30) @unique
   password String @db.VarChar(20)
 
   tweets Tweet[] 
 
-  dthrCriacao DateTime @default(now()) @map("dthr_criacao")
+  dthrCriacao     DateTime @default(now()) @map("dthr_criacao")
   dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
 
   @@map("user")
 }
 
 model Tweet {
-  idtweet String @db.Uuid @id @default(uuid())
-  content String @db.VarChar(30)
-  type String @db.Char(1)
-  id User @relation(fields: [idtweet], references: [idUser])
+  id  String @db.Uuid @id @default(uuid()) @map("id_tweet")
+  userId    String @db.Uuid @map("id_user")
 
-  dthrCriacao DateTime @default(now()) @map("dthr_criacao")
+  content String @db.VarChar(30)
+  type    String @db.Char(1) @map("db_tweet")
+  
+  userIdRl User @relation(fields: [id], references: [idUser])
+
+  like Like?
+
+  dthrCriacao     DateTime @default(now()) @map("dthr_criacao")
   dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
 
   @@map("tweet")
 }
 
+model Like {
+  idUser  String @db.Uuid  @default(uuid()) @map("id_user")
+  idTweet String @db.Uuid @id @default(uuid())
+  tweet Tweet @relation(fields: [idTweet], references: [id])
+
+  dthrCriacao     DateTime @default(now()) @map("dthr_criacao")
+  dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
+  
+  @@map("like")
+}

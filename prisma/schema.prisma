@@ -19,6 +19,8 @@ model User {
   password String @db.VarChar(20)
 
   tweets Tweet[] 
+  following Follow[]  @relation("following")
+  follower  Follow[]  @relation("follower")
 
   dthrCriacao     DateTime @default(now()) @map("dthr_criacao")
   dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
@@ -52,4 +54,17 @@ model Like {
   dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
   
   @@map("like")
+}
+
+model Follow {
+  id              String @id @db.Uuid @default(uuid()) 
+  idFollowing     String @db.Uuid @map("id_following")
+  idFollower        String @db.Uuid @map("id_follower")
+  usernameFollowing String @default("default_value") @map("username_following ") @db.VarChar(50)
+  usernameFollower  String @default("default_value") @map("username_follower") @db.VarChar(50)
+
+  following User @relation("following",fields: [idFollowing], references: [idUser])
+  follower User @relation("follower", fields: [idFollower], references: [idUser])
+
+  @@map("follow")
 }

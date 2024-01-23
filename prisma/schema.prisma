@@ -18,6 +18,8 @@ model User {
   email    String @db.VarChar(30) @unique
   password String @db.VarChar(20)
 
+  token String? 
+
   tweets Tweet[] 
   following Follow[]  @relation("following")
   follower  Follow[]  @relation("follower")
@@ -42,7 +44,7 @@ model Tweet {
   dthrCriacao     DateTime @default(now()) @map("dthr_criacao")
   dthrAtualizacao DateTime @updatedAt @map("dthr__atualizacao")
 
-  @@map("tweet")
+    @@map("tweet")
 }
 
 model Like {

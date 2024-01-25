@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { errorBadRequest, serverError } from "../util/response.helper";
-import { error } from "console";
 import { User } from "../models/user.model";
 import repository from "../database/prisma.repository";
 

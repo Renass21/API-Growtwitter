@@ -113,7 +113,51 @@ export class TweetController{
         }
     }
 
-    
+    public async updateTweet(req: Request, res: Response){
+        try {
+            const { idUser, id } = req.params;
+            const { content, type } = req.body;
+
+            if(!content || !type){
+                return errorBadRequest(res);
+            };
+
+            const user = await repository.user.findUnique({
+                where: {
+                    idUser
+                },
+            });
+
+            if(!user){
+                return errorNotFound(res, "User");
+            };
+
+            const tweet = await repository.tweet.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+
+            if(!tweet){  
+                return errorNotFound(res, "Tweet");
+            };
+
+            await repository.tweet.update({
+                where: {
+                    id
+                },
+                data: {
+                    content,
+                    type
+                }
+            });
+
+            return sucessfullRequest(res, "Tweet updated");
+
+        } catch (error) {
+            serverError(res, error);
+        }
+    }
 
 
     public async deleteTweet(req: Request, res: Response){

@@ -112,5 +112,44 @@ export class TweetController{
             serverError(res, error);
         }
     }
+
     
+
+
+    public async deleteTweet(req: Request, res: Response){
+      try {
+            const { idUser, id } = req.params;
+
+            const user = await repository.user.findUnique({
+                where: {
+                    idUser
+                },
+            });
+
+            if(!user){
+                return errorNotFound(res, "User");
+            };
+
+            const tweet = await repository.tweet.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+
+            if(!tweet){  
+                return errorNotFound(res, "Tweet");
+            };
+
+            await repository.tweet.delete({
+                where: {
+                    id
+                },
+            });
+
+            return sucessfullRequest(res, "Tweet deleted");
+
+      } catch (error) {
+        return serverError(res, error)
+      }
+    }
 }

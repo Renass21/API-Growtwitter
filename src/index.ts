@@ -18,6 +18,10 @@ app.post("/tweet", tweetController.createNewTweet);
 app.get("/tweets", tweetController.getTweet);
 app.get("/tweets/:id", tweetController.getAllTweets);
 
+
+
+
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 })

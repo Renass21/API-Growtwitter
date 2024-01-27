@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { errorBadRequest, errorNotFound, serverError } from "../util/response.helper";
+import { errorBadRequest, errorNotFound, serverError, sucessfullRequest } from "../util/response.helper";
 import repository from "../database/prisma.repository";
 import { Tweet } from "../models/tweet.model";
 import { adapterUser } from "../util/user.adapter";
@@ -48,4 +48,69 @@ export class TweetController{
             return serverError(res, error);
         }
     }
+    public async getTweet(req: Request, res: Response){
+        try {
+          const { idUser, id } = req.params;
+          
+          if(!idUser || !id){
+            return errorBadRequest(res);
+          }
+
+          const user = await repository.user.findUnique({
+            where: {
+                idUser
+            }
+          })
+
+          if(!user){
+            return errorNotFound(res, "User");
+          }
+          
+          const tweet = await repository.tweet.findUnique({
+            where: {
+                id: idUser,
+            }
+          })
+          
+          if(!tweet){
+            return errorNotFound(res, "Tweet");
+          }
+
+            return sucessfullRequest(res, "Tweet");
+            
+        } catch (error) {
+            serverError(res, error);
+        }
+    }
+
+    public async getAllTweets(req: Request, res: Response){
+        try {
+            const { idUser } = req.params;
+            
+            if(!idUser){
+                return errorBadRequest(res);
+            };
+
+            const user = await repository.user.findUnique({
+                where: {
+                    idUser
+                },
+            });
+
+            if(!user){
+                return errorNotFound(res, "User");
+            };
+
+            const tweets = await repository.tweet.findMany({
+                where: {
+                    userId: idUser
+                },
+            });
+            return sucessfullRequest(res, "tweets");
+
+        } catch (error) {
+            serverError(res, error);
+        }
+    }
+    
 }

@@ -50,9 +50,54 @@ export class LikeController {
             });
             
             return sucessfullRequest(res, "Like created sucessfully");
-            
+
         } catch (error) {
-            serverError(res, error)
+            serverError(res, error);
+        }
+    }
+
+    public async deleteLike(req: Request, res: Response) {
+        try {
+            const { idTweet, idUser } = req.params;
+            
+            const user = await repository.user.findUnique({
+                where: {
+                    idUser,
+                },
+            });
+
+            if (!user) {
+                return errorNotFound(res, "User");
+            };
+
+            const tweet = await repository.tweet.findUnique({
+                where: {
+                    id: idTweet,
+                }
+            });
+
+            if(!tweet) {
+                return errorNotFound(res, "Tweet");
+            };
+
+            const like = await repository.like.findFirst({
+                where: {
+                    idTweet,
+                    idUser
+                },
+            });
+
+            await repository.like.delete({
+                where: {
+                    idTweet,
+                    idUser,
+                },
+            });
+
+            return sucessfullRequest(res, "Like deleted sucessfully")
+
+        } catch (error) {
+            serverError(res, error);
         }
     }
 }

@@ -24,9 +24,9 @@ export class TweetController{
             return errorNotFound(res,"User")
            }
 
-           const userBackEnd = adapterUser(user);
+           const userBackend = adapterUser(user);
 
-           const tweet = new Tweet(content, type);
+           const tweet = new Tweet(content, type, userBackend);
            
            const tweetCreated = await repository.tweet.create({
             data: {

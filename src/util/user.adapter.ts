@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User, Prisma } from "@prisma/client";
 import { User as UserBackEnd } from "../models/user.model";
 
 export function adapterUser(user: User): UserBackEnd {

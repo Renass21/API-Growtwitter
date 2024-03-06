@@ -8,10 +8,6 @@ export class LoginController {
         try {
             const { email, username, password } = req.body;
 
-            if( !email || !username || !password ) {
-                return errorBadRequest(res);
-            } 
-
             const user = await repository.user.findFirst({
                 where: {
                     email,

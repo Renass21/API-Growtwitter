@@ -17,7 +17,7 @@ model User {
   username String @db.VarChar(30)
   email    String @db.VarChar(30) @unique
   password String @db.VarChar(20)
-
+  urlPhoto String? @map("url_photo")
   token String? 
 
   tweets Tweet[] 

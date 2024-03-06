@@ -25,8 +25,7 @@ export async function authLoginMiddleware(req: Request, res: Response, next: Nex
                 ok: false,
                 message: "Token invalid or unauthorized." 
             });
-        };
-
+        }
             next();
 
         } catch (error: any) {

@@ -3,6 +3,7 @@ import cors from "cors";
 import { LoginController } from "./controllers/login.controller";
 import { UserController } from "./controllers/user.controller";
 import { TweetController } from "./controllers/tweet.controller";
+import { logMiddleware } from "./middlewares/log.middleware.";
 import { authLoginMiddleware } from "./middlewares/auth.middleware";
 
 const app = express();
@@ -15,12 +16,12 @@ const tweetController = new TweetController();
 
 app.post("/signup", userController.user);
 
-app.post("/tweet", [authLoginMiddleware] ,tweetController.createNewTweet);
-app.get("/tweets", [authLoginMiddleware] ,tweetController.getTweet);
-app.get("/tweets/:id", [authLoginMiddleware] ,tweetController.getAllTweets);
+app.post("/tweet", [logMiddleware, authLoginMiddleware] ,tweetController.createNewTweet);
+app.get("/tweets", [logMiddleware, authLoginMiddleware] ,tweetController.getTweet);
+app.get("/tweets/:id", [logMiddleware, authLoginMiddleware] ,tweetController.getAllTweets);
 
 
-app.post("/login", [authLoginMiddleware] ,loginController.login);
+app.post("/login", [logMiddleware, authLoginMiddleware] ,loginController.login);
 
 
 app.listen(3000, () => {

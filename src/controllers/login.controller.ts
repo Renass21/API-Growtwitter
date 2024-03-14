@@ -2,46 +2,27 @@ import { Request, Response } from "express";
 import { errorBadRequest, serverError } from "../util/response.helper";
 import repository from "../database/prisma.repository";
 import { randomUUID } from "crypto";
+import { AuthService } from "../services/auth.service";
 
 export class LoginController {
     public async login(req: Request, res: Response){
         try {
+            //1- Entrada
             const { email, username, password } = req.body;
 
-            const user = await repository.user.findFirst({
-                where: {
-                    email,
-                    username,
-                    password,
-                }
+            if(email || username || password) {
+                return errorBadRequest(res);
+            }
+            //2- Processamento
+            const authservice = new AuthService();
+            const result = await authservice.login({
+                email,
+                username,
+                password,
             });
             
-            if(!user) {
-                return res.status(401).send({
-                    ok: false,
-                    message: "Invalid credentials"
-                });
-            }
-                const token = randomUUID();
-                
-            await repository.user.update({
-                where: {
-                        idUser: user.idUser,
-                },
-                data: {
-                    token
-                }
-            })
-
-            return res.status(200).send({
-                ok: true,
-                message: "Login successful",
-                data: {
-                    id: user.idUser,
-                    name: user.name,
-                    token,
-                },
-            })
+            //3- Saida
+            return res.status(result.code).send(result);
 
         } catch (error: any) {
             return serverError(res,error);

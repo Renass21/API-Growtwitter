@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { errorBadRequest, serverError } from "../util/response.helper";
-import repository from "../database/prisma.repository";
-import { randomUUID } from "crypto";
 import { AuthService } from "../services/auth.service";
 
 export class LoginController {

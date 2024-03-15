@@ -1,18 +1,11 @@
 import { randomUUID } from "crypto";
 import repository from "../database/prisma.repository";
+import { LoginDTO } from "../contracts/login.contract";
+import { Result } from "../contracts/result.contract";
 
-export interface LoginDTO {
-    email: string, 
-    username: string,
-    password: string
-}
 
-export interface Result {
-    ok: boolean;
-    message: string;
-    code: number;
-    data?: any;
-}
+
+
 export class AuthService {
     public async login(data: LoginDTO): Promise<Result> {
 
@@ -21,6 +14,10 @@ export class AuthService {
                 email: data.email,
                 username: data.username, 
                 password: data.password,
+            },
+            select: {
+                idUser: true,
+                name:  true,
             }
         });
         

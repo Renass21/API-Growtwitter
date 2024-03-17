@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import repository from "../database/prisma.repository";
 import { LoginDTO } from "../contracts/login.contract";
 import { Result } from "../contracts/result.contract";
-
+import jwt from "jsonwebtoken";
 
 
 
@@ -29,16 +29,9 @@ export class AuthService {
             };
         }
         
-        const token = randomUUID();
-                
-        await repository.user.update({
-            where: {
-                    idUser: user.idUser,
-            },
-            data: {
-                token
-            }
-        })
+        const token = jwt.sign(user, "aaaaa");
+
+
         return {
             ok: true,
             message: "Login successfully!",

@@ -29,14 +29,19 @@ export class AuthService {
             };
         }
         
-        const token = jwt.sign(user, process.env.JWT_SECRET!);
-
+        const token = this.generateToken(user);
 
         return {
             ok: true,
             message: "Login successfully!",
             code:200
         }
+
+    }
+
+    public generateToken(payload: any) {
+        const token = jwt.sign(payload, process.env.JWT_SECRET!);
+        return token;        
 
     }
 }

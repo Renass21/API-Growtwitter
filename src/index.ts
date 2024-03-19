@@ -1,5 +1,8 @@
 import express  from "express";
 import cors from "cors";
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import { LoginController } from "./controllers/login.controller";
 import { UserController } from "./controllers/user.controller";
 import { TweetController } from "./controllers/tweet.controller";
@@ -24,7 +27,7 @@ app.get("/tweets/:id", [logMiddleware, authLoginMiddleware] ,tweetController.get
 app.post("/login", [logMiddleware, authLoginMiddleware] ,loginController.login);
 
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log("Server is running on port 3000");
 })
 

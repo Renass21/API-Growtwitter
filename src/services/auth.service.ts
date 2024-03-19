@@ -29,7 +29,7 @@ export class AuthService {
             };
         }
         
-        const token = jwt.sign(user, "aaaaa");
+        const token = jwt.sign(user, process.env.JWT_SECRET!);
 
 
         return {
